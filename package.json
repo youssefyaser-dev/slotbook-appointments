@@ -1,0 +1,11 @@
+{
+  "name": "slotbook",
+  "version": "1.0.0",
+  "description": "Appointment booking REST API with a mobile-friendly installable web app.",
+  "type": "module",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning server/index.js",
+    "seed": "SEED_DEMO=1 node --disable-warning=ExperimentalWarning server/index.js",
+    "test": "node --disable-warning=ExperimentalWarning --test test/*.test.js"
+  }
+}
