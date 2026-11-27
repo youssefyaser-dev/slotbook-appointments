@@ -29,10 +29,10 @@ async function render() {
   if (S.booking) return doneView();
   if (!S.services.length) { try { S.services = await api('GET', '/api/services'); } catch (e) { return frame(`<p class="note">${esc(e.message)}</p>`); } }
   if (S.step === 0) {
-    frame(`<div class="hero"><h1>Book your visit</h1><p>Pick a service, a specialist and a time. No account needed.</p></div>${bar()}<h2>Choose a service</h2><div class="list">${S.services.map((s) => `<button class="opt" data-id="${s.id}"><span><b>${esc(s.name)}</b><small>${s.minutes} minutes</small></span><span class="price">${money(s.price)}</span></button>`).join('')}</div>`);
+    frame(`<div class="hero"><small class="eyebrow">Clinic booking</small><h1>Book your visit</h1><p>Pick a service, a specialist and a time. No account needed.</p></div>${bar()}<h2>Choose a service</h2><div class="list">${S.services.map((s) => `<button class="opt" data-id="${s.id}"><span class="ava sv" style="--h:${(s.id*67)%360}">${esc(s.name[0])}</span><span class="grow"><b>${esc(s.name)}</b><small>${s.minutes} minutes</small></span><span class="price">${money(s.price)}</span></button>`).join('')}</div>`);
     document.querySelectorAll('.opt').forEach((b) => b.onclick = async () => { S.service = S.services.find((s) => s.id == b.dataset.id); S.providers = await api('GET', '/api/providers?service=' + S.service.id); go(1); });
   } else if (S.step === 1) {
-    frame(`${back()}${bar()}<h2>Choose a specialist</h2><div class="list">${S.providers.map((p) => `<button class="opt" data-id="${p.id}"><span><b>${esc(p.name)}</b><small>${esc(p.title)}</small></span><span>&rarr;</span></button>`).join('')}</div>`);
+    frame(`${back()}${bar()}<h2>Choose a specialist</h2><div class="list">${S.providers.map((p) => `<button class="opt" data-id="${p.id}"><span class="ava" style="--h:${(p.id*83+150)%360}">${esc(p.name.replace(/^Dr\.? /,'')[0])}</span><span class="grow"><b>${esc(p.name)}</b><small>${esc(p.title)}</small></span><span class="chev">&rsaquo;</span></button>`).join('')}</div>`);
     bind(); document.querySelectorAll('.opt').forEach((b) => b.onclick = () => { S.provider = S.providers.find((p) => p.id == b.dataset.id); S.date = null; S.time = null; S.slots = null; go(2); });
   } else if (S.step === 2) {
     const ds = days(); if (!S.date) S.date = ds.find((x) => S.provider.days.includes(x.d.getDay()))?.iso || ds[0].iso;
